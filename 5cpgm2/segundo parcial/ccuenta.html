@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cuenta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .register-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .register-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-field:focus {
+            border-color: #007BFF;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .login-link {
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .login-link a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        function validarFormulario(event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
+
+            // Verifica si las contraseñas coinciden
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden. Por favor, verifícalas.");
+                event.preventDefault();  // Previene el envío del formulario
+            } else {
+                // Si las contraseñas coinciden, redirige a otra página
+                window.location.href = "registro_exitoso.html"; // Cambia esta URL a la página de éxito
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="register-container">
+        <h2>Crear cuenta</h2>
+        <!-- Aquí agregamos el evento onsubmit para llamar la función de validación -->
+        <form onsubmit="validarFormulario(event)">
+            <!-- Nombre de usuario -->
+            <input type="text" name="username" class="input-field" placeholder="Nombre de usuario" required>
+
+            <!-- Correo electrónico -->
+            <input type="email" name="email" class="input-field" placeholder="Correo electrónico" required>
+
+            <!-- Contraseña -->
+            <input type="password" id="password" name="password" class="input-field" placeholder="Contraseña" required>
+
+            <!-- Confirmar contraseña -->
+            <input type="password" id="confirm_password" name="confirm_password" class="input-field" placeholder="Confirmar contraseña" required>
+
+            <!-- Botón de envío -->
+            <button type="submit" class="submit-btn">Registrar</button>
+        </form>
+
+        <div class="login-link">
+            <p>¿Ya tienes una cuenta? <a href="file:///C:/Users/guzma/OneDrive/Documentos/5cpgm/segundo%20parcial/inicio%20de%20sesion.html">Iniciar sesión</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

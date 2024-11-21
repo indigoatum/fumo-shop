@@ -1,0 +1,12 @@
+@import ("proyecto.html"){}
+	
+
+  h1 {
+  	color:white;
+  }
+ body {
+
+ 	background-image: url(https://i.pinimg.com/originals/26/ed/fe/26edfe7476f61c0afa0ad92574065225.gif);
+ 	background-size: cover;
+ 	background-repeat: no-repeat; 
+ }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> promedio</title>
+  <link rel="stylesheet" href="promedio.css">-
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de promedio</h1>
+        <form id="formulario">
+            <font><b>       
+            <label for="calificacion1">Calificación 1:</label>
+            <input type="number" id="calificacion1" min="0" max="10" step="0.01" required>
+            
+            <label for="calificacion2">Calificación 2:</label>
+            <input type="number" id="calificacion2" min="0" max="10" step="0.01" required>
+            
+            <label for="calificacion3">Calificación 3:</label>
+            <input type="number" id="calificacion3" min="0" max="10" step="0.01" required>
+            
+            <label for="calificacion4">Calificación 4:</label>
+            <input type="number" id="calificacion4" min="0" max="10" step="0.01" required>
+            
+            <label for="calificacion5">Calificación 5:</label>
+            <input type="number" id="calificacion5" min="0" max="10" step="0.01" required>
+            
+            <label for="calificacion6">Calificación 6:</label>
+            <input type="number" id="calificacion6" min="0" max="10" step="0.01" required>
+            </font></b>
+            
+            <button type="submit">Calcular promedio</button>
+        </form>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        document.getElementById("formulario").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var calificacion1 = parseFloat(document.getElementById("calificacion1").value);
+            var calificacion2 = parseFloat(document.getElementById("calificacion2").value);
+            var calificacion3 = parseFloat(document.getElementById("calificacion3").value);
+            var calificacion4 = parseFloat(document.getElementById("calificacion4").value);
+            var calificacion5 = parseFloat(document.getElementById("calificacion5").value);
+            var calificacion6 = parseFloat(document.getElementById("calificacion6").value);
+            
+            var promedio = (calificacion1 + calificacion2 + calificacion3 + calificacion4 + calificacion5 + calificacion6) / 6;
+            
+            document.getElementById("resultado").textContent = "El promedio es: " + promedio.toFixed(2);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+        /* CSS para curso JavaScript aprenderaprogramar.com*/
+
+body {font-family: sans-serif; background-color: yellow; font-size: 14px;}
+
+h1 {color: blue;}
+
+a {text-decoration: none;}
+
+label {color: maroon; display:block; padding:5px;}
+
+.itemsMenu{ padding: 3px 0px;
+
+border-bottom: 1px solid #778;
+
+font: bold 16px Verdana, sans-serif; }
+
+.itemsMenu li { list-style: none; display: inline; margin-left:10px;}
+
+.itemsMenu li a { padding: 3px 1em;
+
+border: 1px solid #778; border-bottom: none;
+
+background: #DDE; text-decoration: none; }
+
+.itemsMenu li a:link {color: #448; }
+
+.itemsMenu li a:hover {color: #000; background: #AAE; border-color: #227; }
+
+.itemsMenu li a#actual { background: #AAE; }

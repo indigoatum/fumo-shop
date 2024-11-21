@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>fumo-Racing</title>
+
+<link rel="stylesheet" type="text/css" href="paginad.css">
+<style>
+
+     #openCartButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #openCartButton:hover {
+            background-color: #218838;
+        }
+
+#cart {
+            position: fixed;
+            top: 0;
+            right: -300px;  /* Inicialmente oculto, fuera de la pantalla */
+            width: 300px;
+            height: 100%;
+            background-color: #f4f4f4;
+            box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        #cart.open {
+            right: 0; /* Se desliza hacia la pantalla */
+        }
+
+        /* Estilo del contenido del carrito */
+        .cart-header {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+        }
+
+        .cart-item-price {
+            color: #28a745;
+        }
+
+        .cart-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .cart-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .cart-close:hover {
+            color: #ff0000;
+        }
+
+         .product-button {
+            padding: 12px 20px;
+            margin: 5px;
+            background-color: #12730F;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .product-button:hover {
+            background-color: #0E550B;
+
+    </style>
+
+</head>
+
+<body>
+
+
+<header class="header">
+
+
+<div class="container">
+
+
+<div class="menu">
+
+<a href="file:///C:/Users/guzma/OneDrive/Documentos/4cpgm/primer%20parcial/paginaa.html"class="logo">fumos's shop</a>
+
+    <input type="checkbox" id="menu">
+
+    <label for="menu">
+
+    <img class="menu-icono" src="https://flyclipart.com/thumb2/three-horizontal-lines-lines-popup-icon-with-png-and-vector-868472.png"width = "4%" height = "4%">
+
+    </label>
+
+                  <nav class="navbar">
+
+                   <ul>
+
+                  <li> <a href="http://localhost/4cpgm2/primer%20parcial/paginaa.html">Inicio</a> </li>
+
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginae.html">Productos</a> </li>
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginac.html">Contacto</a> </li>
+
+                  <li> <a href="http://localhost/login/registro.php">iniciar sesion</a> </li>
+                   </ul>
+
+                    <button id="openCartButton">Abrir Carrito</button>
+
+    <div id="cart">
+        <span class="cart-close" id="closeCartButton">&times;</span>
+        <div class="cart-header">
+            <h2>Carrito de Compras</h2>
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-footer">
+            <span>Total:</span>
+            <span id="totalPrice">$0</span>
+        </div>
+<script>
+    const openCartButton = document.getElementById('openCartButton');
+    const closeCartButton = document.getElementById('closeCartButton');
+    const cart = document.getElementById('cart');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const totalPriceElement = document.getElementById('totalPrice');
+    const clearCartButton = document.getElementById('clearCartButton'); // Botón para vaciar el carrito
+
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    let totalPrice = JSON.parse(localStorage.getItem('totalPrice')) || 0;
+
+    openCartButton.addEventListener('click', function () {
+        cart.classList.add('open');
+    });
+
+    closeCartButton.addEventListener('click', function () {
+        cart.classList.remove('open');
+    });
+    function addProduct(name, price) {
+        const existingProduct = cartItems.find(item => item.name === name);
+
+        if (existingProduct) {
+            existingProduct.quantity++;
+        } else {
+            cartItems.push({ name, price, quantity: 1 });
+        }
+
+        updateCart();
+    }
+
+    function removeProduct(name) {
+        const existingProduct = cartItems.find(item => item.name === name);
+
+        if (existingProduct) {
+            if (existingProduct.quantity > 1) {
+                existingProduct.quantity--;
+            } else {
+                cartItems = cartItems.filter(item => item.name !== name); // Eliminar el producto si la cantidad llega a 0
+            }
+        }
+
+        updateCart();
+    }
+
+    function removeAllUnits(name) {
+        cartItems = cartItems.filter(item => item.name !== name); // Filtrar y eliminar el producto del carrito
+        updateCart();
+    }
+
+    clearCartButton.addEventListener('click', function () {
+        cartItems = [];
+        updateCart();
+    });
+
+    function updateCart() {
+        cartItemsContainer.innerHTML = '';
+        totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        totalPriceElement.textContent = `$${totalPrice}`;
+
+        cartItems.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('cart-item');
+
+            itemElement.innerHTML = `
+                <span class="cart-item-name">${item.name} (x${item.quantity})</span>
+                <span class="cart-item-price">$${item.price * item.quantity}</span>
+                <button class="remove-one" data-name="${item.name}">-</button>
+                <button class="remove-all" data-name="${item.name}">Eliminar</button>
+            `;
+
+            cartItemsContainer.appendChild(itemElement);
+        });
+
+        document.querySelectorAll('.remove-one').forEach(button => {
+            button.addEventListener('click', function () {
+                removeProduct(this.getAttribute('data-name'));
+            });
+        });
+
+        document.querySelectorAll('.remove-all').forEach(button => {
+            button.addEventListener('click', function () {
+                removeAllUnits(this.getAttribute('data-name'));
+            });
+        });
+
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
+    }
+
+    updateCart();
+</script>
+<button id="clearCartButton">Vaciar Carrito</button>
+    </div>
+
+
+                  </nav>
+
+</div>
+
+
+</header>
+
+
+   </main>
+
+      
+
+     <section class="testimonio container">
+
+     <br><br>
+
+        <h2>acerca de nosotros</h2>
+
+        <br><br>
+
+          <div class="testimonio-content">
+
+            <section class="map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3365.2623544481676!2d-116.85365572448586!3d32.4924163737839!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80d93f0273a96e31%3A0xabcc0c52e143862d!2sPlaza%20Paseo%202000!5e0!3m2!1ses-419!2smx!4v1711064762466!5m2!1ses-419!2smx" width="800" height="550" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </section>
+
+
+           <div class="testimonio-content">
+
+           </div>
+
+           <div class="testimonio-1">
+
+
+           <h3>tienda en fisico y pagina</h3>
+
+
+           <p>Nuestra pagina lleva activa desde el 2075 llevando fumos a todo el mundo para que se puedan apreciar o regalar a quien mas gustes.tambien nos puedes encontrar en nuestro local en la plaza 2000,locar 352 ubicado en el tercer piso de la misma. </p>
+
+           <h3> numero de telefono </h3>
+           <p><h4>664-558-3254<h4></p>
+
+           <h3> instagram:fumos-racing </h3>
+           <h3> facebock:@fumos-racing </h3>
+           <h3> muchas gracias por comfiar en nosotros todos estos años.</h3>
+           <h3> fumo racing team :)</h3>
+
+
+
+           </div>
+
+          </div>
+
+     </section>
+
+       
+
+        <footer  class="footer container">
+
+         <div class="footer-content">
+
+         <a href="#" class="logo">fumos's shop</a>
+
+               <ul>
+
+                  <li> <a href="http://localhost/4cpgm2/primer%20parcial/paginaa.html">Inicio</a> </li>
+
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginae.html">Productos</a> </li>
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginac.html">Contacto</a> </li>
+
+                  <li> <a href="#">Carrito</a> </li>
+
+                  <li> <a href="http://localhost/login/registro.php">iniciar sesion</a> </li>
+
+               </ul>
+
+         </div>
+
+        </footer>
+
+
+</body>
+
+</html>
+
+

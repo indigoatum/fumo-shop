@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahorro</title>
+<style>
+   body {
+        font-family: Arial, sans-serif;
+        background-color: #C7FCFF;
+    }
+    
+    .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        text-align: center;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        font-weight: bold;
+    }
+    
+    input[type="number"] {
+        width: calc(100% - 10px);
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #2955CA;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+</head>
+<body>
+ <div class="container">
+    <h1>Calculadora de Ahorro</h1>
+    <form id="ahorroForm">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required><br><br>
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" required><br><br>
+        <label for="montoInicial">Monto Inicial ($):</label>
+        <input type="number" id="montoInicial" required><br><br>
+        <button type="button" onclick="calcularAhorro()">Calcular Ahorro</button>
+    </form>
+    <div id="resultado"></div>
+<div>
+    <script>
+        function calcularAhorro() {
+            const nombre = document.getElementById('nombre').value;
+            const edad = parseInt(document.getElementById('edad').value);
+            let montoInicial = parseFloat(document.getElementById('montoInicial').value);
+            let edadAlcanzada = 0;
+
+            while (montoInicial < 20000) {
+                montoInicial *= 2;
+                edadAlcanzada++;
+            }
+
+            const resultado = ¡Hola ${nombre}! Con un monto inicial de $${document.getElementById('montoInicial').value}, alcanzarás los $20,000 a los ${edad + edadAlcanzada} años.;
+            document.getElementById('resultado').innerText = resultado;
+        }
+    </script>
+</body>
+</html>

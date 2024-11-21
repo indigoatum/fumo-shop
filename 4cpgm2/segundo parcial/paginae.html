@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>fumo-Racing</title>
+
+<link rel="stylesheet" type="text/css" href="paginaf.css">
+
+<style>
+
+     #openCartButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #openCartButton:hover {
+            background-color: #218838;
+        }
+
+#cart {
+            position: fixed;
+            top: 0;
+            right: -300px;  /* Inicialmente oculto, fuera de la pantalla */
+            width: 300px;
+            height: 100%;
+            background-color: #f4f4f4;
+            box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        #cart.open {
+            right: 0; /* Se desliza hacia la pantalla */
+        }
+
+        /* Estilo del contenido del carrito */
+        .cart-header {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+        }
+
+        .cart-item-price {
+            color: #28a745;
+        }
+
+        .cart-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .cart-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .cart-close:hover {
+            color: #ff0000;
+        }
+
+         .product-button {
+            padding: 12px 20px;
+            margin: 5px;
+            background-color: #12730F;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .product-button:hover {
+            background-color: #0E550B;
+
+
+
+
+
+    </style>
+
+</head>
+
+<body>
+
+
+<header class="header">
+
+
+<div class="container">
+
+
+<div class="menu">
+
+<a href="file:///C:/Users/guzma/OneDrive/Documentos/4cpgm/primer%20parcial/paginaa.html"class="logo">fumos's shop</a>
+
+    <input type="checkbox" id="menu">
+
+    <label for="menu">
+
+    <img class="menu-icono" src="https://flyclipart.com/thumb2/three-horizontal-lines-lines-popup-icon-with-png-and-vector-868472.png"width = "4%" height = "4%">
+
+    </label>
+
+                  <nav class="navbar">
+
+                   <ul>
+
+                 <li> <a href="http://localhost/4cpgm2/primer%20parcial/paginaa.html">Inicio</a> </li>
+
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginae.html">Productos</a> </li>
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginac.html">Contacto</a> </li>
+
+                  <li> <a href="http://localhost/login/registro.php">iniciar sesion</a> </li>
+
+                </ul>
+
+    <button id="openCartButton">Abrir Carrito</button>
+
+    <div id="cart">
+        <span class="cart-close" id="closeCartButton">&times;</span>
+        <div class="cart-header">
+            <h2>Carrito de Compras</h2>
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-footer">
+            <span>Total:</span>
+            <span id="totalPrice">$0</span>
+        </div>
+<script>
+    const openCartButton = document.getElementById('openCartButton');
+    const closeCartButton = document.getElementById('closeCartButton');
+    const cart = document.getElementById('cart');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const totalPriceElement = document.getElementById('totalPrice');
+    const clearCartButton = document.getElementById('clearCartButton');
+
+    // Cargar datos del carrito desde localStorage
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    let totalPrice = JSON.parse(localStorage.getItem('totalPrice')) || 0;
+
+    // Abrir el carrito
+    openCartButton.addEventListener('click', function () {
+        cart.classList.add('open');
+    });
+
+    // Cerrar el carrito
+    closeCartButton.addEventListener('click', function () {
+        cart.classList.remove('open');
+    });
+
+    // Agregar un producto al carrito
+    function addProduct(name, price) {
+        const existingProduct = cartItems.find(item => item.name === name);
+
+        if (existingProduct) {
+            existingProduct.quantity++;
+        } else {
+            cartItems.push({ name, price, quantity: 1 });
+        }
+
+        updateCart();
+    }
+
+    // Quitar una unidad de un producto
+    function removeProduct(name) {
+        const existingProduct = cartItems.find(item => item.name === name);
+
+        if (existingProduct) {
+            if (existingProduct.quantity > 1) {
+                existingProduct.quantity--;
+            } else {
+                cartItems = cartItems.filter(item => item.name !== name);
+            }
+        }
+
+        updateCart();
+    }
+
+    // Eliminar todas las unidades de un producto
+    function removeAllUnits(name) {
+        cartItems = cartItems.filter(item => item.name !== name);
+        updateCart();
+    }
+
+    // Vaciar el carrito
+    clearCartButton.addEventListener('click', function () {
+        cartItems = []; // Vaciar la lista de productos
+        totalPrice = 0; // Reiniciar el total a 0
+        localStorage.removeItem('cartItems'); // Eliminar los datos del carrito en localStorage
+        localStorage.removeItem('totalPrice'); // Eliminar el precio total en localStorage
+        updateCart(); // Actualizar la vista del carrito
+    });
+
+    // Actualizar la vista del carrito y guardar en localStorage
+    function updateCart() {
+        cartItemsContainer.innerHTML = ''; // Limpiar el contenedor
+        totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0); // Calcular el total
+        totalPriceElement.textContent = `$${totalPrice}`; // Actualizar el total en la interfaz
+
+        cartItems.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('cart-item');
+
+            itemElement.innerHTML = `
+                <span class="cart-item-name">${item.name} (x${item.quantity})</span>
+                <span class="cart-item-price">$${item.price * item.quantity}</span>
+                <button class="remove-one" data-name="${item.name}">-</button>
+                <button class="remove-all" data-name="${item.name}">Eliminar</button>
+            `;
+
+            cartItemsContainer.appendChild(itemElement);
+        });
+
+        // Asignar eventos a los botones dinámicos
+        document.querySelectorAll('.remove-one').forEach(button => {
+            button.addEventListener('click', function () {
+                removeProduct(this.getAttribute('data-name'));
+            });
+        });
+
+        document.querySelectorAll('.remove-all').forEach(button => {
+            button.addEventListener('click', function () {
+                removeAllUnits(this.getAttribute('data-name'));
+            });
+        });
+
+        // Guardar el carrito en localStorage
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
+    }
+
+    // Al cargar la página, actualizar la vista del carrito
+    updateCart();
+</script>
+<button id="clearCartButton" class="btn-1">Vaciar Carrito</button>
+
+
+
+<button class="info-btn" onclick="alert('se realizara la compra a continuacion')">agregar al carrito</button>
+
+    </div>
+
+</header>
+
+   <main class="products container">
+
+<br><br>
+    <h2>fumos</h2>
+    <h2>(peluches)</h2>
+             <p><h3>
+
+             "que es un fumo, un fumo es un peluche de la franquicia touhou con estilo chibi generalmente de un tamaño de 30 cm" 
+          </h3>
+
+             </p>
+   
+
+    <div class="products-content">
+
+    
+    <div class="products-1">
+
+    <img src="https://http2.mlstatic.com/D_NQ_NP_963064-CBT72599049235_102023-O.webp"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo saigyouji yuyuko</h4>
+     <p>$1,500</p>
+
+      <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo saigyouji yuyuko', 1500)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/pes.html"class="btn-1">informacion</a>
+
+    </div>
+
+   
+
+    <div class="products-1">
+
+    <img src="https://m.media-amazon.com/images/I/51i1JBw1+AL._AC_UF894,1000_QL80_.jpg"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo cirno</h4>
+
+    <p>$1,250</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo cirno', 1250)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/pec.html"class="btn-1">informacion</a>
+    </div>
+
+
+    <div class="products-1">
+
+    <img src="https://m.media-amazon.com/images/I/619SGpFbA3L.jpg"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo sakuya izayoi</h4>
+
+    <p>$1,700</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo sakuya izayoi', 1700)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/pesi.html"class="btn-1">informacion</a>
+
+    </div>
+
+    <div class="products-1">
+
+    <img src="https://http2.mlstatic.com/D_NQ_NP_952857-CBT69217955617_052023-O.webp"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo Hakurei Reimu</h4>
+
+    <p>$1,500</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo Hakurei Reimu', 1500)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/pehr.html"class="btn-1">informacion</a>
+
+    </div>
+
+    <div class="products-1">
+
+    <img src="https://http2.mlstatic.com/D_NQ_NP_917580-CBT73602485846_122023-O.webp"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo kirisame marisa</h4>
+
+    <p>$1,200</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo kirisame marisa', 1200)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/pekm.html"class="btn-1">informacion</a>
+
+    </div>
+
+    <div class="products-1">
+
+    <img src="https://http2.mlstatic.com/D_NQ_NP_966459-CBT69894264670_062023-O.webp"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo komeiji koishi</h4>
+
+    <p>$1,600</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo komeiji koishi', 1600)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/pekk.html"class="btn-1">informacion</a>
+
+    </div>
+
+    <div class="products-1">
+
+    <img src="https://img.amiami.com/images/product/main/222/GOODS-04230807.jpg"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo undongein inaba</h4>
+
+    <p>$1,200</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo undongein inaba', 1200)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/peui.html" class="btn-1">informacion</a>
+    </div>
+
+    <div class="products-1">
+
+    <img src="https://i.ebayimg.com/images/g/MTwAAOSwkQJdnNP7/s-l500.jpg"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo shion</h4>
+
+    <p>$1,275</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo shion', 1275)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/peshion.html" class="btn-1">informacion</a>
+
+    </div>
+
+     <div class="products-1">
+
+    <img src="https://img1.picmix.com/output/stamp/normal/0/6/5/6/2526560_2947d.png"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo fladre scarlet</h4>
+
+    <p>$1,800</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo fladre scarlet', 1800)">Agregar al carrito </button>
+
+     <a href="http://localhost/4cpgm2/tercer%20parcial/pefs.html"class="btn-1">informacion</a>
+
+    </div>
+
+     <div class="products-1">
+
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNQd00wbduuAgORF2N27bjJK0tarQl-rwAgw&s"width = "35%" height = "50%">
+
+    <h4>Muñeca de peluche Touhou Project Fumo remilia scarlet</h4>
+
+    <p>$2,000</p>
+
+    <button class="product-button" onclick="addProduct('Muñeca de peluche Touhou Project Fumo remilia scarlet', 2000)">Agregar al carrito </button>
+
+    <a href="http://localhost/4cpgm2/tercer%20parcial/pers.html"class="btn-1">informacion</a>
+
+    </div>
+
+
+    </div>
+
+
+
+       
+
+        <footer  class="footer container">
+
+         <div class="footer-content">
+
+         <a href="#" class="logo">fumos's shop</a>
+
+               <ul>
+
+                 <li> <a href="http://localhost/4cpgm2/primer%20parcial/paginaa.html">Inicio</a> </li>
+
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginae.html">Productos</a> </li>
+
+                  <li> <a href="http://localhost/4cpgm2/segundo%20parcial/paginac.html">Contacto</a> </li>
+
+                  <li> <a href="#">Carrito</a> </li>
+
+                  <li> <a href="http://localhost/login/registro.php">iniciar sesion</a> </li>
+
+               </ul>
+
+         </div>
+
+        </footer>
+
+
+   </main>
+
+
+
+</html>
+
+

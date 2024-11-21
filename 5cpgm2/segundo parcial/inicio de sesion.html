@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-field:focus {
+            border-color: #007BFF;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .forgot-password, .create-account {
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .forgot-password a, .create-account a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        // Función para redirigir al usuario a la página principal (simulando un inicio de sesión exitoso)
+        function redirigirAlInicio() {
+            window.location.href = "file:///C:/Users/guzma/OneDrive/Documentos/4cpgm/primer%20parcial/paginaa.html"; // Cambia esta URL por tu destino real
+        }
+    </script>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Iniciar sesión</h2>
+        <form onsubmit="redirigirAlInicio(); return false;"> <!-- Previene el envío del formulario y redirige -->
+            <input type="text" name="username" class="input-field" placeholder="Usuario" required>
+            <input type="password" name="password" class="input-field" placeholder="Contraseña" required>
+            <button type="submit" class="submit-btn">Iniciar sesión</button>
+        </form>
+
+        <div class="forgot-password">
+            <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+        </div>
+
+        <!-- Sección de crear cuenta -->
+        <div class="create-account">
+            <p>¿No tienes una cuenta? <a href="file:///C:/Users/guzma/OneDrive/Documentos/5cpgm/segundo%20parcial/ccuenta.html">Crear cuenta</a></p> <!-- Cambia "registro.html" por la URL de tu página de registro -->
+        </div>
+    </div>
+
+</body>
+</html>

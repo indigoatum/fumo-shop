@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>Formulario de Registro</title>
+    <link rel="stylesheet" type="text/css" href="proyecto.css">
+</head>
+<body>
+    <form action="" method="post">
+    <h2></h2>
+    <form method="post" action="">
+         <input type="hidden" name="Id"> <br><br>
+        
+        <label>Matricula:</label>
+        <input type="number" name="Matricula"><br><br>
+
+        <label>Nombre:</label>
+        <input type="text" name="Nombre"> <br><br>
+    
+        
+        <label>Materia:</label>
+        <input type="text" name="Materia"><br><br>
+        
+
+
+        <input type="submit" name="insertar" value="insertar"><br><br>
+        <input type="submit" name="actualizar"value="actualizar"><br><br>
+        <input type="submit" name="eliminar"value="eliminar"><br><br>
+        </form>
+            <?php
+        $conexion=new mysqli("localhost","root","","docentes");
+
+    
+            $Id=$_POST["Id"];
+            $Matricula = $_POST["Matricula"];
+            $Nombre = $_POST["Nombre"];
+            $Materia = $_POST["Materia"];
+
+
+            if (isset($_POST["insertar"])){
+            $insertar = "INSERT INTO profes (Matricula,Nombre,Materia,) VALUES ('$Matricula','$Nombre','$Materia')";
+            $sql=mysqli_query($conexion, $insertar);
+        }
+
+        if (isset($_POST["actualizar"])){
+            $id = $_POST["Id"];
+            $Matricula = $_POST["Matricula"];
+            $Nombre = $_POST["Nombre"];
+            $Materia = $_POST["Materia"];
+
+            $actualizar = "UPDATE Profes SET Nombre='$Nombre',
+            Materia='$Materia',Matricula='$Matricula', ;
+            WHERE Id='$Id'";
+            $sql=mysqli_query($conexion, $actualizar);   
+        }
+        if (isset($_POST["ELIMINAR"])){
+            $id = $_POST["Id"];
+            $eliminar = "DELETE FROM  WHERE Id='$Id'";
+            $sql=mysqli_query($conexion,$eliminar);
+        }
+        ?>
+  
+       
+    
+</body>
+</html>
